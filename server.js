@@ -17,9 +17,10 @@ app.get('/', function (req, res) {
 	res.send('Hello World');
 });
 
-app.get('/test.html', function (req, res) {
+app.get('/:fileName', function (req, res) {
   // run some server-side code
-	console.log('test.html requested'); 
+  	var fileName = req.params.fileName;
+	console.log(fileName + ' requested'); 
 	// note that __dirname  gives the path to the server.js file
-	res.sendFile(__dirname + '/test.html');
+	res.sendFile(__dirname + '/'+ fileName);
 });
