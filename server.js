@@ -1,10 +1,6 @@
 // express is the server that forms part of the nodejs program
 var express = require('express');
-var http = require('http');
 var app = express();
-
-var httpServer = http.createServer(app);
-httpServer.listen(4480); // as 80 is used by apache
 
 var https = require('https');
 var fs = require('fs');
@@ -19,4 +15,10 @@ app.get('/', function (req, res) {
   // run some server-side code
 	console.log('the server has received a request'); 
 	res.send('Hello World');
+});
+
+app.get('/test.html', function (req, res) {
+  // run some server-side code
+	console.log('test.html requested'); 
+	res.sendFile('test.html');
 });
