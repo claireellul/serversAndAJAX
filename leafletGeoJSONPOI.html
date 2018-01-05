@@ -1,0 +1,84 @@
+<html>
+<head>
+ <link rel="stylesheet" href="https://unpkg.com/leaflet@1.1.0/dist/leaflet.css"
+   integrity="sha512-wcw6ts8Anuw10Mzh9Ytw4pylW8+NAD4ch3lqm9lzAsTxg0GFeJgoAtxuCLREZSC5lUXdVyo/7yfsqFjQ4S+aKw=="
+   crossorigin=""/>
+
+
+<link rel="stylesheet" href="ionicons.min.css">
+<link rel="stylesheet" href="leaflet.awesome-markers.css">
+
+
+<script src="https://unpkg.com/leaflet@1.1.0/dist/leaflet.js"
+   integrity="sha512-mNqn2Wg7tSToJhvHcqfzLMU6J4mkOImSPTxVZAdo+lcPlk+GhZmYgACEe0x35K7YzW1zJ7XyJV/TT1MrdXvMcA=="
+   crossorigin=""></script>
+
+
+<script >
+
+// create a variable that will hold the XMLHttpRequest() - this must be done outside a function so that all the functions can use the same variable
+var client;
+
+// create the code to get the geoJSON data using an XMLHttpRequest
+function getData() {
+   client = new XMLHttpRequest();
+   //client.open('GET','https://developer.cege.ucl.ac.uk:31060/getPOI');
+   client.open('GET','https://developer.cege.ucl.ac.uk:31060/getGeoJSON/united_kingdom_highway/geom');
+   client.onreadystatechange = processData;  
+   client.send();
+}
+// create the code to wait for the response from the data server, and process the response once it is received
+function processData() {
+  // this function listens out for the server to say that the data is ready - i.e. has state 4
+  if (client.readyState == 4) {
+    // once the data is ready, process the data
+    var geoData = client.responseText;
+    loadGeoJSONLayer(geoData);
+    }
+}
+// convert the received data - which is text - to JSON format and add it to the map
+function loadGeoJSONLayer(geoData) {
+    // convert the text to JSON
+    var geoJSON = JSON.parse(geoData);
+
+    // add the JSON layer onto the map - it will appear using the default icons
+    geojsonLayer = L.geoJson(geoJSON).addTo(mymap);
+
+    // change the map zoom so that all the data is shown
+    mymap.fitBounds(geojsonLayer.getBounds());
+}
+
+</script>
+<script src="leaflet.awesome-markers.min.js"></script>
+
+  <style type="text/css"> 
+#mapid { height: 180px; }
+  </style>
+
+</head>
+<body>
+
+
+
+<div id="mapid" style="width: 600px; height: 400px;"></div>
+<script>
+
+	var mymap = L.map('mapid').setView([51.505, -0.09], 4);
+
+	L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
+		maxZoom: 18,
+		attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
+			'<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+			'Imagery © <a href="http://mapbox.com">Mapbox</a>',
+		id: 'mapbox.streets'
+	}).addTo(mymap);
+
+ 
+    document.addEventListener('DOMContentLoaded', function() {
+        getData();
+    }, false);
+    
+</script>
+</body>
+</html>
+</body>
