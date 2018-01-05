@@ -48,6 +48,15 @@ pool.connect(function(err,client,done) {
     });
 });
 
+app.post('/uploadData',function(req,res){
+
+	// note that we are using POST here as we are uploading data
+	// so the parameters form part of the BODY of the request rather than the RESTful API
+
+	// for now, just echo the request back to the client
+	res.send(req.body);
+});
+
 
  app.get('/getPOI', function (req,res) {
      pool.connect(function(err,client,done) {
