@@ -1,20 +1,50 @@
-function startDataUpload() {
-	alert ("start data upload");
+/* TO RUN THIS EXAMPLE YOU NEED A POSTGIS TABLE CREATED WITH THE FOLLOWING SQL
 
+
+
+create table formdata
+(
+name character varying (100),
+surname character varying(100),
+module character varying(10),
+language character varying (20),
+modulelist character varying (200),
+lecturetime character varying (15),
+geom geometry
+)
+
+*/
+
+function startDataUpload() {
 	var name = document.getElementById("name").value;
 	var surname = document.getElementById("surname").value;
 	var module = document.getElementById("module").value;
-
-
-
 	var postString = "name="+name +"&surname="+surname+"&module="+module;
+	// now get the select box values
+	var language = document.getElementById("languageselectbox").value;
+	postString = postString + "&language="+language;
+	// now get the checkbox values - separate them with a | so that they can be split later on if necessary
+	var checkString = "";
+	for (var i = 1;i< 5;i++){
+		if (document.getElementById("check"+i).checked === true) {
+			checkString = checkString + document.getElementById("check"+i).value + "||"
+		}
+
+	}
+	postString = postString + "&modulelist="+checkString;
+	// now get the radio button values
+	if (document.getElementById("morning").checked) {
+ 		 postString=postString+"&lecturetime=morning";
+	}
+	if (document.getElementById("afternoon").checked) {
+ 		 postString=postString+"&lecturetime=afternoon";
+	}
 	alert(postString);
 	processData(postString);
 }
 
 var client;
 
-// create the code to get the geoJSON data using an XMLHttpRequest
 function processData(postString) {
    client = new XMLHttpRequest();
    client.open('POST','https://developer.cege.ucl.ac.uk:31060/uploadData',true);
