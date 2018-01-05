@@ -27,9 +27,27 @@ var pg = require('pg');
 var pool = new pg.Pool(config)
 
 
+var bodyParser = require('body-parser');
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
+app.use(bodyParser.json());
 
 
 httpsServer.listen(4443);
+
+
+app.post('/uploadData',function(req,res){
+
+	// note that we are using POST here as we are uploading data
+	// so the parameters form part of the BODY of the request rather than the RESTful API
+	console.log(req.body.name);
+	console.dir(req.body);
+
+	// for now, just echo the request back to the client
+	res.send(req.body);
+});
+
 
 app.get('/postgistest', function (req,res) {
 pool.connect(function(err,client,done) {
@@ -48,14 +66,6 @@ pool.connect(function(err,client,done) {
     });
 });
 
-app.post('/uploadData',function(req,res){
-
-	// note that we are using POST here as we are uploading data
-	// so the parameters form part of the BODY of the request rather than the RESTful API
-
-	// for now, just echo the request back to the client
-	res.send(req.body);
-});
 
 
  app.get('/getPOI', function (req,res) {
