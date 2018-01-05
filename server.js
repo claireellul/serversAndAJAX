@@ -50,6 +50,32 @@ pool.connect(function(err,client,done) {
 });
 
 
+  app.get('/getPOI', function (req,res) {
+     pool.connect(function(err,client,done) {
+       if(err){
+           console.log("not able to get connection "+ err);
+           res.status(400).send(err);
+       } 
+        // use the inbuilt geoJSON functionality
+        //client.query('SELECT name, st_asgeojson(geom) as geom from united_kingdom_poi LIMIT 100', function(err,result){
+        	var querystring = " SELECT 'FeatureCollection' As type, array_to_json(array_agg(f)) As features  FROM (SELECT 'Feature' As type     , ST_AsGeoJSON(lg.geom)::json As geometry, row_to_json((SELECT l FROM (SELECT id, name, category) As l      )) As properties   FROM united_kingdom_poi  As lg limit 100  ) As f ";
+        	console.log(querystring);
+        	client.query(querystring,function(err,result){
+
+          //call `done()` to release the client back to the pool
+           done(); 
+           if(err){
+               console.log(err);
+               res.status(400).send(err);
+           }
+           console.log(result);
+           res.status(200).send(result.rows);
+       });
+    });
+});
+
+
+
 app.get('/', function (req, res) {
   // run some server-side code
 	console.log('the server has received a request'); 
