@@ -16,6 +16,8 @@ geom geometry
 */
 
 function startDataUpload() {
+	
+	// get the textbox values
 	var name = document.getElementById("name").value;
 	var surname = document.getElementById("surname").value;
 	var module = document.getElementById("module").value;
@@ -39,6 +41,13 @@ function startDataUpload() {
 	if (document.getElementById("afternoon").checked) {
  		 postString=postString+"&lecturetime=afternoon";
 	}
+
+
+	// now get the geometry values
+	var latitude = document.getElementById("latitude").value;
+	var longitude = document.getElementById("longitude").value;
+	postString = postString + "&latitude=" + latitude + "&longitude=" + longitude;
+
 	alert(postString);
 	processData(postString);
 }
