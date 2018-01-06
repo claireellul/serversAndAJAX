@@ -23,7 +23,7 @@ var client;
 function getData() {
    client = new XMLHttpRequest();
    //client.open('GET','https://developer.cege.ucl.ac.uk:31060/getPOI');
-   client.open('GET','https://developer.cege.ucl.ac.uk:31060/getGeoJSON/united_kingdom_highway/geom');
+   client.open('GET','https://developer.cege.ucl.ac.uk:31060/getGeoJSON/formdata/geom');
    client.onreadystatechange = processData;  
    client.send();
 }
