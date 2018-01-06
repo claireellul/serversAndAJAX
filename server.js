@@ -20,6 +20,13 @@ for (var i = 0; i < configarray.length; i++) {
     config[split[0].trim()] = split[1].trim();
 }
 
+var databasecode  = require("databasecode");
+app.get('/database',function(req,res){
+  console.log("database");
+  databasecode.printMsg();
+  res.send("database");
+});
+
 
 console.log(config);
 
