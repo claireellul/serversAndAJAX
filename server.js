@@ -4,14 +4,10 @@ var app = express();
 
 var https = require('https');
 var fs = require('fs');
-var app = express();
 var privateKey = fs.readFileSync('/home/studentuser/certs/client-key.pem').toString();
 var certificate = fs.readFileSync('/home/studentuser/certs/client-cert.pem').toString(); 
 var credentials = {key: privateKey, cert: certificate};
 var httpsServer = https.createServer(credentials, app);
-
-var configtext = ""+fs.readFileSync("/home/studentuser/certs/postGISConnection.js");
-
 
 var databasecode  = require("databasecode");
 app.get('/database',function(req,res){
@@ -19,18 +15,6 @@ app.get('/database',function(req,res){
   databasecode.printMsg();
   res.send("database");
 });
-
-
-
-//var pg = require('pg');
-//var pool = new pg.Pool(config)
-
-
-var bodyParser = require('body-parser');
-app.use(bodyParser.urlencoded({
-  extended: true
-}));
-app.use(bodyParser.json());
 
 
 httpsServer.listen(4443);
